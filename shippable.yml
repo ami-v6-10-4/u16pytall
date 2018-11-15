@@ -1,58 +1,12 @@
 language: python
 
 python:
-  - 2.7 #.14
-  - 3.5 #this will be excluded
-  - 3.6 #it ll fail but build will pass because of allow_failure
-  #- 3.7 #.0 
-  #- pypy #6.0.0 
-  - pypy3 #6.0.0
+  - 2.7.14 
+  - 3.7.0 
+  - pypy2 
+  - pypy3 
 
-env:
-  - ENV=valueFromEnv
-  - TEST=bvtFromEnv
-  
-runtime:
-  - nodePool: dynamic__x86_64__Ubuntu_14_04__c4_large
-  - nodePool: default_node_pool  
-  
-matrix:
-#include this version with the env 
-  include:               
-    - python: pypy 
-      nodePool: default_node_pool
-      env: 
-        - M1=oneFromMatrixIncludeNodeU16
-        - ENV=valueFromMatrixIncludeNodeU16
-        - FOO=fromMatrixInclude
-    - python: 3.7
-      nodePool: dynamic__x86_64__CentOS_7__c4_large #not there in runtime but in matrix include
-      env:
-        - M1=oneFromMatrixIncludeNodeCentOs7
-        - ENV=valueFromMatrixIncludeNodeCentOs7
-  exclude:             
-    - python: 3.5
-#allows failure for this version
-  allow_failures: 
-    - python: 3.6
-        
 build:
     
   ci:
-    - python --version 
-    - pip --version #8.1.2
-    - echo ENV=$ENV
-    - echo TEST=$TEST
-    - echo M1=$M1
-    - echo FOO=$FOO
-    - printenv
-    - virtualenv --version #15.1.0
-    - if [ $SHIPPABLE_PYTHON_VERSION == "pypy" & $ENV == "valueFromMatrixIncludeNodeU16" ]; then echo 'success'; else testfail; fi
-    - docker pull shippabledocker/sample_node_pvt:ecr
-    
-integrations:
-    
-  hub:
- #Docker integration
-    - integrationName: ship-docker
-      type: dockerRegistryLogin
+    - python --version
